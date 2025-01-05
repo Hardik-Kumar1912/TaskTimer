@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FormatDate } from "../../../FormatDate";
 import { useNavigate } from "react-router-dom";
 import { Trash2, MoveUpRight } from "lucide-react";
 import { deleteToTasks } from "../redux/taskSlice";
