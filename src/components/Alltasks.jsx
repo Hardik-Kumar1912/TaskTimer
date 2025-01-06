@@ -11,14 +11,21 @@ const Alltasks = () => {
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const [filterOption, setFilterOption] = useState("All");
 
-  const filteredData = tasks.filter((task) =>
-    task.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData = tasks.filter((task) => {
+    const matchesSearchTerm = task.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filterOption === "All" ||
+      (filterOption === "Pending" && !task.isCompleted) ||
+      (filterOption === "Completed" && task.isCompleted);
+
+    return matchesSearchTerm && matchesFilter;
+  });
 
   function showTime(taskId) {
     const savedTime = localStorage.getItem(`taskTime-${taskId}`);
-    return savedTime ? convertSecondsToHMS(savedTime) : 0; 
+    return savedTime ? convertSecondsToHMS(savedTime) : 0;
   }
 
   function moveToTask(taskId) {
@@ -39,6 +46,16 @@ const Alltasks = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+
+        <div>
+          <select className="text-black border-2 border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => setFilterOption(e.target.value)}
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
 
         <div className="w-full h-full px-4 pt-4 flex flex-col gap-y-5 bg-white shadow-md rounded-lg">
           <h2 className="text-xl font-semibold text-gray-800 border-b pb-3">
